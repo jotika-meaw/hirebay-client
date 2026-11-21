@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test \"test/*.test.js\""
+    "test": "node --test \"test/*.test.js\"",
+    "seed": "node --import ./scripts/alias-loader.mjs scripts/seed.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
