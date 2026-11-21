@@ -15,7 +15,7 @@ export default function AuthTabs({ active, redirect }) {
         role="tab"
         aria-selected={active === "register"}
         className={cn(
-          "flex-1 rounded-full py-2.5 text-center text-sm font-bold transition-colors",
+          "flex-1 rounded-full py-3 text-center text-sm font-bold transition-colors",
           active === "register"
             ? "bg-brand text-brand-foreground"
             : "text-muted-foreground hover:text-foreground"
@@ -28,7 +28,7 @@ export default function AuthTabs({ active, redirect }) {
         role="tab"
         aria-selected={active === "login"}
         className={cn(
-          "flex-1 rounded-full py-2.5 text-center text-sm font-bold transition-colors",
+          "flex-1 rounded-full py-3 text-center text-sm font-bold transition-colors",
           active === "login"
             ? "bg-brand text-brand-foreground"
             : "text-muted-foreground hover:text-foreground"
