@@ -17,6 +17,7 @@ export const owners = {
     name: "Karim Heavy Machinery",
     email: "owner@karimhm.com",
     phone: "+880 1711-000000",
+    since: "2025",
     image: null,
   },
   lensbox: {
@@ -24,6 +25,7 @@ export const owners = {
     name: "LensBox BD",
     email: "hello@lensbox.bd",
     phone: "+880 1722-000000",
+    since: "2025",
     image: null,
   },
   driveline: {
@@ -31,6 +33,7 @@ export const owners = {
     name: "DriveLine Logistics",
     email: "ops@driveline.bd",
     phone: "+880 1733-000000",
+    since: "2025",
     image: null,
   },
   agro: {
@@ -38,6 +41,7 @@ export const owners = {
     name: "AgroRent Rajshahi",
     email: "hello@agrorent.bd",
     phone: "+880 1744-000000",
+    since: "2025",
     image: null,
   },
   powerhub: {
@@ -45,6 +49,7 @@ export const owners = {
     name: "PowerHub Comilla",
     email: "rent@powerhub.bd",
     phone: "+880 1755-000000",
+    since: "2025",
     image: null,
   },
   soundcraft: {
@@ -52,6 +57,7 @@ export const owners = {
     name: "SoundCraft BD",
     email: "book@soundcraft.bd",
     phone: "+880 1766-000000",
+    since: "2025",
     image: null,
   },
   utsab: {
@@ -59,6 +65,7 @@ export const owners = {
     name: "Utsab Events",
     email: "hello@utsab.bd",
     phone: "+880 1777-000000",
+    since: "2025",
     image: null,
   },
 };
