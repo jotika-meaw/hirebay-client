@@ -156,6 +156,7 @@ export default function RegisterForm({ redirect, initialRole }) {
       <form
         onSubmit={handleSubmit(onSubmit, onInvalid)}
         className="flex flex-col gap-4"
+        method="post"
         noValidate
       >
         <div className="flex flex-col gap-1.5">

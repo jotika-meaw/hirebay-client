@@ -90,7 +90,7 @@ export default function LoginForm({ redirect }) {
       <h1 className="font-display text-[30px] font-extrabold tracking-[-0.035em]">
         Welcome <span className="highlight">back</span>
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" method="post" noValidate>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" autoComplete="email" {...register("email")} aria-invalid={Boolean(errors.email)} />

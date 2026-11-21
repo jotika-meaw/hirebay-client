@@ -1,12 +1,11 @@
 import axios from "axios";
-import { authClient } from "./auth-client.js";
 
 // Axios client for the Express API (used by api-source.js in Phase W).
 // JWTs come from /api/token and live in an in-memory cache; the cache is
 // refreshed when missing or under 60 s from expiry, retried once on 401,
 // and cleared on logout. Logged-out visitors never touch /api/token:
-// getToken() first asks the BetterAuth client for a session and returns
-// null (no Authorization header, no failing request) when there is none.
+// getToken() first checks the BetterAuth session and returns null
+// (no Authorization header, no failing request) when there is none.
 let cachedToken = null;
 let cachedExpiry = 0;
 
@@ -16,13 +15,31 @@ export function clearToken() {
 }
 
 // true = session, false = logged out, null = unknown (non-browser env).
-async function hasSession() {
+// Whether a BetterAuth session exists, via a plain same-origin fetch —
+// never the BetterAuth client store, so a stuck client can never block API
+// calls. true = session, false = logged out, null = unknown (non-browser
+// env or unreachable endpoint) → fall through to /api/token. In-flight
+// checks are shared so a burst of API calls issues a single get-session.
+let sessionCheck = null;
+
+async function checkSession() {
   try {
-    const { data } = await authClient.getSession();
-    return data ? true : false;
+    const res = await fetch("/api/auth/get-session", { credentials: "same-origin" });
+    if (!res.ok) return false;
+    const data = await res.json().catch(() => null);
+    return Boolean(data?.user);
   } catch {
     return null;
   }
+}
+
+async function hasSession() {
+  if (!sessionCheck) {
+    sessionCheck = checkSession().finally(() => {
+      sessionCheck = null;
+    });
+  }
+  return sessionCheck;
 }
 
 async function fetchToken() {
