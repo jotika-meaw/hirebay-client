@@ -109,8 +109,8 @@ export default function EquipmentCard({ item }) {
         </div>
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-dashed border-input pt-3">
           <span className="min-w-0 flex-1">
-            <b className="font-display text-2xl tracking-[-0.03em] whitespace-nowrap">{formatBDT(item.price)}</b>
-            <span className="text-[13px] text-muted-foreground"> / {UNIT_LABEL[item.rentalType] ?? item.rentalType}</span>
+            <b className="block font-display text-2xl tracking-[-0.03em] whitespace-nowrap">{formatBDT(item.price)}</b>
+            <span className="block text-[13px] text-muted-foreground">/ {UNIT_LABEL[item.rentalType] ?? item.rentalType}</span>
           </span>
           <Link
             href={detailsHref}
