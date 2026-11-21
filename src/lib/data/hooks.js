@@ -38,8 +38,13 @@ export function useFavorites() {
   return useQuery({ queryKey: ["favorites"], queryFn: () => source.listFavorites() });
 }
 
-export function useFavoriteIds() {
-  return useQuery({ queryKey: ["favorite-ids"], queryFn: () => source.getFavoriteIds() });
+export function useFavoriteIds(options = {}) {
+  const { enabled = true } = options;
+  return useQuery({
+    queryKey: ["favorite-ids"],
+    queryFn: () => source.getFavoriteIds(),
+    enabled,
+  });
 }
 
 export function useToggleFavorite() {
