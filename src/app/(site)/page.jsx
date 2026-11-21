@@ -2,6 +2,8 @@ import Hero from "@/components/home/Hero";
 import TrustedStrip from "@/components/home/TrustedStrip";
 import Categories from "@/components/home/Categories";
 import Featured from "@/components/home/Featured";
+import StatsBand from "@/components/home/StatsBand";
+import HowItWorks from "@/components/home/HowItWorks";
 
 export const metadata = {
   title: "Hirebay · Equipment Rental Platform",
@@ -16,6 +18,8 @@ export default function Home() {
       <TrustedStrip />
       <Categories />
       <Featured />
+      <StatsBand />
+      <HowItWorks />
     </main>
   );
 }
