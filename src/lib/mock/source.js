@@ -66,6 +66,16 @@ function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function matchStatus(row, status) {
+  if (!status) return true;
+  const wanted = String(status)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (wanted.length === 0) return true;
+  return wanted.includes(row.status);
+}
+
 function paginate(rows, page, limit) {
   const safePage = Math.max(1, page || 1);
   const safeLimit = Math.min(24, Math.max(1, limit || 9));
@@ -322,7 +332,7 @@ export async function listMyBookings(params = {}) {
   await delay();
   const user = requireRole("customer");
   let rows = bookingsFor(bookings.filter((b) => b.customer.id === user.id));
-  if (params.status) rows = rows.filter((b) => b.status === params.status);
+  if (params.status) rows = rows.filter((b) => matchStatus(b, params.status));
   return paginate(rows, Number(params.page), Number(params.limit));
 }
 
@@ -330,7 +340,7 @@ export async function listOwnerBookings(params = {}) {
   await delay();
   const user = requireRole("owner");
   let rows = bookingsFor(bookings.filter((b) => b.owner.id === user.id));
-  if (params.status) rows = rows.filter((b) => b.status === params.status);
+  if (params.status) rows = rows.filter((b) => matchStatus(b, params.status));
   return paginate(rows, Number(params.page), Number(params.limit));
 }
 
@@ -338,7 +348,7 @@ export async function listAdminBookings(params = {}) {
   await delay();
   requireRole("admin");
   let rows = bookingsFor(bookings);
-  if (params.status) rows = rows.filter((b) => b.status === params.status);
+  if (params.status) rows = rows.filter((b) => matchStatus(b, params.status));
   return paginate(rows, Number(params.page), Number(params.limit));
 }
 
