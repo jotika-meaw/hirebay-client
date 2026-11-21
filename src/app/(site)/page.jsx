@@ -5,6 +5,8 @@ import Featured from "@/components/home/Featured";
 import StatsBand from "@/components/home/StatsBand";
 import HowItWorks from "@/components/home/HowItWorks";
 import WhyUs from "@/components/home/WhyUs";
+import Reviews from "@/components/home/Reviews";
+import Faq from "@/components/home/Faq";
 
 export const metadata = {
   title: "Hirebay · Equipment Rental Platform",
@@ -22,6 +24,8 @@ export default function Home() {
       <StatsBand />
       <HowItWorks />
       <WhyUs />
+      <Reviews />
+      <Faq />
     </main>
   );
 }
