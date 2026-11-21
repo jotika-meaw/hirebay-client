@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import Logo from "@/components/layout/Logo";
 import ThemeToggle from "@/components/layout/ThemeToggle";
-import { useSession } from "@/lib/session-stub";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -60,7 +60,16 @@ function NavLink({ href, label, pathname, onNavigate }) {
 
 export default function SiteNavbar() {
   const pathname = usePathname();
-  const { data: user, isLoggedIn } = useSession();
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user ?? null;
+  const isLoggedIn = Boolean(user);
+
+  async function handleLogout() {
+    await authClient.signOut();
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header className="sticky top-3 z-40 mx-auto w-full max-w-[1200px] px-3">
@@ -102,12 +111,9 @@ export default function SiteNavbar() {
                   {initials(user?.name)}
                 </AvatarFallback>
               </Avatar>
-              <Link
-                href="/dashboard"
-                className={buttonVariants({ size: "sm" })}
-              >
+              <Button size="sm" onClick={handleLogout}>
                 Logout
-              </Link>
+              </Button>
             </>
           ) : (
             <>
@@ -137,12 +143,17 @@ export default function SiteNavbar() {
                 ))}
                 <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
                   {isLoggedIn ? (
-                    <Link
-                      href="/dashboard"
-                      className={buttonVariants({ className: "w-full" })}
-                    >
-                      Dashboard
-                    </Link>
+                    <>
+                      <Link
+                        href="/dashboard"
+                        className={buttonVariants({ className: "w-full" })}
+                      >
+                        Dashboard
+                      </Link>
+                      <Button className="w-full" onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    </>
                   ) : (
                     <>
                       <Link
