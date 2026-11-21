@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/layout/Logo";
+import FooterWordmark from "@/components/layout/FooterWordmark";
 
 function XLogo({ className }) {
   return (
@@ -154,11 +155,7 @@ export function FullFooter() {
           </ul>
         </div>
       </div>
-      <div className="overflow-hidden px-2" aria-hidden="true">
-        <p className="text-center font-display text-[clamp(90px,19vw,280px)] leading-[0.85] font-extrabold lowercase text-[#1C1917] transition-colors select-none hover:text-brand">
-          hirebay
-        </p>
-      </div>
+      <FooterWordmark />
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-2 px-6 py-4 text-sm text-white/60">
           <p>© 2026 Hirebay. All rights reserved.</p>
