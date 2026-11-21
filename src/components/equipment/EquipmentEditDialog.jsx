@@ -8,7 +8,7 @@ import { useUpdateEquipment } from "@/lib/data/hooks";
 
 // Edit dialog (PNG 14b): the same form with values filled. Saving sends
 // the listing back to Pending for re-approval (server rule).
-export default function EquipmentEditDialog({ item, open, onOpenChange }) {
+export default function EquipmentEditDialog({ item, open, onOpenChange, showPendingNote = true }) {
   const updateEquipment = useUpdateEquipment();
 
   function onSubmit(values) {
@@ -34,11 +34,17 @@ export default function EquipmentEditDialog({ item, open, onOpenChange }) {
               <span className="relative block size-[72px] flex-none overflow-hidden rounded-2xl border border-border">
                 <Image src={item.image} alt="" fill sizes="72px" className="object-cover" />
               </span>
-              <p className="m-0 text-sm text-muted-foreground">
-                Saving changes sends the listing back to{" "}
-                <span className="rounded-full bg-warning-bg px-2 py-0.5 text-xs font-bold text-warning">Pending</span>{" "}
-                for re-approval.
-              </p>
+              {showPendingNote ? (
+                <p className="m-0 flex-1 text-sm text-muted-foreground">
+                  Saving changes sends the listing back to{" "}
+                  <span className="rounded-full bg-warning-bg px-2 py-0.5 text-xs font-bold text-warning">Pending</span>{" "}
+                  for re-approval.
+                </p>
+              ) : (
+                <p className="m-0 flex-1 text-sm text-muted-foreground">
+                  Changes apply immediately and keep the current status.
+                </p>
+              )}
             </div>
             <EquipmentForm
               key={item.id}
