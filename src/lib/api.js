@@ -29,7 +29,11 @@ async function getToken() {
 export const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 
 api.interceptors.request.use(async (config) => {
-  config.headers.Authorization = `Bearer ${await getToken()}`;
+  try {
+    config.headers.Authorization = `Bearer ${await getToken()}`;
+  } catch {
+    // Logged out: public requests go out without an Authorization header.
+  }
   return config;
 });
 
@@ -38,7 +42,12 @@ api.interceptors.response.use(null, async (error) => {
   if (error.response?.status === 401 && original && !original._retry) {
     original._retry = true;
     clearToken();
-    original.headers.Authorization = `Bearer ${await getToken()}`;
+    try {
+      original.headers.Authorization = `Bearer ${await getToken()}`;
+    } catch {
+      // Still logged out: rethrow the original 401 instead of failing on /api/token.
+      throw error;
+    }
     return api(original);
   }
   throw error;
