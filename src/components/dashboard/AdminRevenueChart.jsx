@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
 import {
   Area,
@@ -20,6 +21,7 @@ function monthLabel(iso) {
 
 // Revenue area (£lakh): theme-aware ink line, dots, yellow→transparent fill.
 export default function AdminRevenueChart({ monthly }) {
+  const reduce = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const dark = resolvedTheme === "dark";
   const ink = dark ? "#FAFAF9" : "#111111";
@@ -70,6 +72,7 @@ export default function AdminRevenueChart({ monthly }) {
             stroke={ink}
             strokeWidth={2.5}
             fill="url(#admin-rev)"
+            isAnimationActive={!reduce}
             dot={{ r: 3.5, fill: "#FFFFFF", stroke: ink, strokeWidth: 2 }}
             activeDot={{ r: 5 }}
           />

@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 // Rental-status donut: Completed (yellow), Confirmed (blue),
@@ -11,6 +12,7 @@ const SEGMENTS = [
 ];
 
 export default function StatusDonut({ mix }) {
+  const reduce = useReducedMotion();
   const data = SEGMENTS.map((s) => ({ ...s, value: mix?.[s.key] ?? 0 }));
   const completed = mix?.completed ?? 0;
 
@@ -29,7 +31,7 @@ export default function StatusDonut({ mix }) {
               }}
               formatter={(value, name) => [`${value}%`, name]}
             />
-            <Pie data={data} dataKey="value" nameKey="label" innerRadius="68%" outerRadius="92%" paddingAngle={2} strokeWidth={0}>
+            <Pie data={data} dataKey="value" nameKey="label" innerRadius="68%" outerRadius="92%" paddingAngle={2} strokeWidth={0} isAnimationActive={!reduce}>
               {data.map((d) => (
                 <Cell key={d.key} fill={d.color} />
               ))}

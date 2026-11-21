@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/dashboard/ConfirmDialog";
@@ -25,7 +26,11 @@ const TABS = [
 
 // Admin equipment moderation: status tabs, approve / reject / edit / delete.
 export default function AdminEquipmentTable() {
-  const [tab, setTab] = useState("all");
+  const searchParams = useSearchParams();
+  const initialTab = ["approved", "pending", "rejected"].includes(searchParams.get("status") ?? "")
+    ? TABS.find((t) => t.status === searchParams.get("status")).id
+    : "all";
+  const [tab, setTab] = useState(initialTab);
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);

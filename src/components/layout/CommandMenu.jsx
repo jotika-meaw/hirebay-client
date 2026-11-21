@@ -97,7 +97,7 @@ export default function CommandMenu() {
     >
       <DialogContent className="max-w-lg overflow-hidden p-0" aria-label="Command menu">
         <DialogTitle className="sr-only">Command menu</DialogTitle>
-        <Command label="Site commands" className="bg-card">
+        <Command label="Site commands" shouldFilter={false} className="bg-card">
           <div className="flex items-center gap-2 border-b border-border px-4">
             <Search className="size-4 flex-none text-subtle" aria-hidden="true" />
             <Command.Input

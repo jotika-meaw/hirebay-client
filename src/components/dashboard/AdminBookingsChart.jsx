@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
 import {
   Bar,
@@ -21,6 +22,7 @@ function monthLabel(iso) {
 
 // Monthly bookings bars; latest month yellow.
 export default function AdminBookingsChart({ monthly }) {
+  const reduce = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const dark = resolvedTheme === "dark";
   const track = dark ? "#292524" : "#E7E5E4";
@@ -54,7 +56,7 @@ export default function AdminBookingsChart({ monthly }) {
             }}
             formatter={(value) => [`${value} bookings`, ""]}
           />
-          <Bar dataKey="v" radius={[6, 6, 0, 0]}>
+          <Bar dataKey="v" radius={[6, 6, 0, 0]} isAnimationActive={!reduce}>
             <LabelList dataKey="v" position="top" fill={tickFill} fontSize={12} fontWeight={600} />
             {data.map((d, i) => (
               <Cell key={i} fill={d.last ? "#FFC727" : track} />
