@@ -1,4 +1,6 @@
 import Hero from "@/components/home/Hero";
+import TrustedStrip from "@/components/home/TrustedStrip";
+import Categories from "@/components/home/Categories";
 
 export const metadata = {
   title: "Hirebay · Equipment Rental Platform",
@@ -10,6 +12,8 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col bg-background">
       <Hero />
+      <TrustedStrip />
+      <Categories />
     </main>
   );
 }
