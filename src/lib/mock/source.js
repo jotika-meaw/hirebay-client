@@ -512,12 +512,12 @@ export async function getMe() {
 
 export async function updateMe(input) {
   await delay();
+  if (input.phone !== undefined && normalizePhone(input.phone) === null) {
+    fail(400, "Enter a valid Bangladeshi mobile number");
+  }
   const user = me();
   for (const field of ["name", "image", "phone", "address"]) {
     if (input[field] !== undefined) user[field] = input[field];
-  }
-  if (input.phone !== undefined && normalizePhone(input.phone) === null) {
-    fail(400, "Enter a valid Bangladeshi mobile number");
   }
   return { data: { ...user } };
 }
