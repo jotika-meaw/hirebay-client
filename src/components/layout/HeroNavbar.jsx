@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Logo from "@/components/layout/Logo";
+import { openCommandMenu } from "@/components/layout/CommandMenu";
 import { authClient } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -73,17 +74,18 @@ export default function HeroNavbar() {
           </Link>
         ))}
       </div>
-      <Link
-        href="/equipment"
+      <button
+        type="button"
+        onClick={openCommandMenu}
         aria-label="Search equipment, command menu"
-        className="hidden h-11 items-center gap-2 rounded-full border border-white/16 bg-white/6 px-3.5 text-[13px] text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex"
+        className="hidden h-11 cursor-pointer items-center gap-2 rounded-full border border-white/16 bg-white/6 px-3.5 text-[13px] text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex"
       >
         <Search className="size-[15px]" aria-hidden="true" />
         Search
         <kbd className="rounded-md border border-white/20 px-1.5 py-0.5 font-mono text-[11px]">
           ⌘K
         </kbd>
-      </Link>
+      </button>
       {user ? (
         <>
           <Link

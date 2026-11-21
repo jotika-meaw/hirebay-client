@@ -15,6 +15,7 @@ import Logo from "@/components/layout/Logo";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { authClient } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
+import { openCommandMenu } from "@/components/layout/CommandMenu";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -88,17 +89,18 @@ export default function SiteNavbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/equipment"
+          <button
+            type="button"
+            onClick={openCommandMenu}
             aria-label="Search equipment"
-            className="hidden h-11 items-center gap-2 rounded-full border border-input bg-card px-4 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
+            className="hidden h-11 cursor-pointer items-center gap-2 rounded-full border border-input bg-card px-4 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
           >
             <Search className="size-4" aria-hidden="true" />
             Search
             <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px]">
               ⌘K
             </kbd>
-          </Link>
+          </button>
           <ThemeToggle />
           {isLoggedIn ? (
             <>

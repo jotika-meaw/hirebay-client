@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import MockSessionBridge from "@/components/dashboard/MockSessionBridge";
+import CommandMenu from "@/components/layout/CommandMenu";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(
@@ -28,6 +29,7 @@ export default function Providers({ children }) {
     >
       <QueryClientProvider client={queryClient}>
         <MockSessionBridge />
+        <CommandMenu />
         {children}
         <Toaster richColors position="top-center" />
       </QueryClientProvider>

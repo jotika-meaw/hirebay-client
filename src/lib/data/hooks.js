@@ -17,10 +17,12 @@ export function useFeatured() {
   return useQuery({ queryKey: ["featured"], queryFn: () => source.getFeaturedEquipment() });
 }
 
-export function useEquipmentList(params = {}) {
+export function useEquipmentList(params = {}, options = {}) {
+  const { enabled = true } = options;
   return useQuery({
     queryKey: ["equipment", params],
     queryFn: () => source.listEquipment(params),
+    enabled,
   });
 }
 

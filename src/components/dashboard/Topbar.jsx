@@ -74,7 +74,7 @@ export default function Topbar({ user, heading, crumb }) {
         {role === "owner" && (
           <Link
             href="/dashboard/owner/add"
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
+            className="inline-flex min-h-11 flex-none items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
           >
             <Plus className="size-4" aria-hidden="true" /> Add equipment
           </Link>

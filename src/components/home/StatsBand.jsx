@@ -34,7 +34,7 @@ export default function StatsBand() {
                 {isPending || value === undefined ? (
                   <span className="h-[68px] w-3/4 animate-pulse rounded-2xl bg-[#292524]" aria-label={`Loading ${cell.label}`} />
                 ) : reduce ? (
-                  <span className="font-display text-[68px] leading-none font-extrabold tracking-[-0.04em] text-brand tabular-nums">
+                  <span className="font-display text-[40px] leading-none font-extrabold tracking-[-0.04em] text-brand tabular-nums sm:text-[54px] lg:text-[68px]">
                     {cell.decimals > 0
                       ? value.toFixed(cell.decimals) + cell.suffix
                       : `${Number(value).toLocaleString("en-IN")}${cell.suffix}`}
@@ -44,7 +44,7 @@ export default function StatsBand() {
                     value={value}
                     suffix={cell.suffix}
                     format={{ useGrouping: true, minimumFractionDigits: cell.decimals, maximumFractionDigits: cell.decimals }}
-                    className="font-display text-[68px] leading-none font-extrabold tracking-[-0.04em] text-brand tabular-nums"
+                    className="font-display text-[40px] leading-none font-extrabold tracking-[-0.04em] text-brand tabular-nums sm:text-[54px] lg:text-[68px]"
                   />
                 )}
                 <span className="text-[15px] text-[#A8A29E]">{cell.label}</span>
