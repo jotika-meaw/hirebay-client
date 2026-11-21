@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Logo from "@/components/layout/Logo";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 import { openCommandMenu } from "@/components/layout/CommandMenu";
 import { authClient } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
@@ -86,6 +87,7 @@ export default function HeroNavbar() {
           ⌘K
         </kbd>
       </button>
+      <ThemeToggle className="hidden border-white/16 bg-white/6 text-white hover:bg-white/10 hover:text-white sm:inline-flex" />
       {user ? (
         <>
           <Link
@@ -142,6 +144,10 @@ export default function HeroNavbar() {
               </Link>
             ))}
             <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
+              <div className="flex min-h-11 items-center justify-between px-4">
+                <span className="text-sm font-semibold">Theme</span>
+                <ThemeToggle />
+              </div>
               {user ? (
                 <>
                   <Link href="/dashboard" className="inline-flex min-h-11 items-center justify-center rounded-full border border-input bg-card px-4 text-sm font-semibold">
