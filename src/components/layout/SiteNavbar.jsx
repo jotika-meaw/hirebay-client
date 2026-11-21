@@ -80,15 +80,15 @@ export default function SiteNavbar() {
         aria-label="Site"
         className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-full border border-border bg-card/90 py-2 pr-2 pl-4 shadow-sm backdrop-blur"
       >
-        <Logo className="justify-self-start" />
+        <Logo className="col-start-1 justify-self-start" />
 
-        <div className="hidden items-center justify-self-center gap-1 min-[1080px]:flex">
+        <div className="col-start-2 hidden items-center justify-self-center gap-1 min-[1080px]:flex">
           {LINKS.map((link) => (
             <NavLink key={link.href} {...link} pathname={pathname} />
           ))}
         </div>
 
-        <div className="flex items-center justify-self-end gap-2">
+        <div className="col-start-3 flex items-center justify-self-end gap-2">
           <button
             type="button"
             onClick={openCommandMenu}

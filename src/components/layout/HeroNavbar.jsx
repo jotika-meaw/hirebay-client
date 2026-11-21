@@ -48,7 +48,7 @@ export default function HeroNavbar() {
       <Link
         href="/"
         aria-label="Hirebay home"
-        className="inline-flex min-h-11 items-center justify-self-start gap-2 pr-2 font-display text-[21px] font-extrabold lowercase tracking-[-0.04em] text-white"
+        className="col-start-1 inline-flex min-h-11 items-center justify-self-start gap-2 pr-2 font-display text-[21px] font-extrabold lowercase tracking-[-0.04em] text-white"
       >
         <span
           aria-hidden="true"
@@ -60,7 +60,7 @@ export default function HeroNavbar() {
         </span>
         hirebay
       </Link>
-      <div className="hidden items-center justify-self-center gap-0.5 min-[1080px]:flex">
+      <div className="col-start-2 hidden items-center justify-self-center gap-0.5 min-[1080px]:flex">
         {LINKS.map((link, i) => (
           <Link
             key={link.href}
@@ -75,7 +75,7 @@ export default function HeroNavbar() {
           </Link>
         ))}
       </div>
-      <div className="flex items-center justify-self-end gap-2">
+      <div className="col-start-3 flex items-center justify-self-end gap-2">
       <button
         type="button"
         onClick={openCommandMenu}
