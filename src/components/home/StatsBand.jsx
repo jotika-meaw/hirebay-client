@@ -23,7 +23,7 @@ export default function StatsBand() {
     <section className="mx-auto w-full max-w-[1240px] px-7 pt-[120px] max-[640px]:pt-[84px]">
       <Reveal className="overflow-hidden rounded-[32px] bg-[#111111] text-[#F5F3EE]">
         <div className="hazard h-3" aria-hidden="true" />
-        <div className="grid grid-cols-1 min-[560px]:grid-cols-2 min-[1080px]:grid-cols-4">
+        <div className="grid grid-cols-2 min-[1080px]:grid-cols-4">
           {CELLS.map((cell) => {
             const value = stats?.[cell.key];
             return (

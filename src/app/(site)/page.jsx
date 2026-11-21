@@ -7,11 +7,12 @@ import HowItWorks from "@/components/home/HowItWorks";
 import WhyUs from "@/components/home/WhyUs";
 import Reviews from "@/components/home/Reviews";
 import Faq from "@/components/home/Faq";
+import OwnerCta from "@/components/home/OwnerCta";
 
 export const metadata = {
-  title: "Hirebay · Equipment Rental Platform",
+  title: "Hirebay · Home",
   description:
-    "Rent the machine, skip the mortgage. Verified equipment owners across Bangladesh.",
+    "Tell Hirebay what you need and where. We match you with verified owners, check the dates and settle the price before you pay with Stripe.",
 };
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
       <WhyUs />
       <Reviews />
       <Faq />
+      <OwnerCta />
     </main>
   );
 }
