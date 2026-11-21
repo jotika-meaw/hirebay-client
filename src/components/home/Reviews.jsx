@@ -68,7 +68,7 @@ export default function Reviews() {
                   <span className="font-mono text-[11px] opacity-70">Rented {review.item}</span>
                 </div>
                 <blockquote className={cn("m-0 leading-[1.5]", featured ? "text-[22px]" : "text-base")}>
-                  “{review.q}”
+                  “{review.quote}”
                 </blockquote>
                 <figcaption className="flex items-center gap-2.5">
                   <span className="relative block size-10 flex-none overflow-hidden rounded-full">
