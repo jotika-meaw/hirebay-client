@@ -5,6 +5,12 @@ import assert from "node:assert/strict";
 // logged out, and the 401 retry must rethrow the original 401 when no
 // token can be fetched. fetch (used for /api/token) and the API transport
 // (axios adapter) are both stubbed — no browser, no network.
+//
+// A4: with NEXT_PUBLIC_AUTH_URL set, the auth client's get-session call
+// resolves through the same fetch stub, so "no session → no /api/token
+// fetch" is provable without a browser.
+process.env.NEXT_PUBLIC_AUTH_URL = "http://test.local";
+
 describe("api token handling (audit A1)", () => {
   let realFetch;
   let tokenFetch;
@@ -73,5 +79,68 @@ describe("api token handling (audit A1)", () => {
       api.get("/equipment", { adapter: fakeApi(401, { message: "Unauthorized" }) }),
       (error) => error?.response?.status === 401
     );
+  });
+
+  function sessionAwareFetch({ sessionData, onToken }) {
+    return async (url, options) => {
+      const target = String(url);
+      if (target.includes("/get-session")) {
+        const payload = sessionData === undefined ? null : sessionData;
+        return {
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          headers: new Headers({ "content-type": "application/json" }),
+          json: async () => payload,
+          text: async () => JSON.stringify(payload),
+          clone() {
+            return this;
+          },
+        };
+      }
+      if (target.endsWith("/api/token")) {
+        onToken?.();
+        return {
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          headers: new Headers({ "content-type": "application/json" }),
+          json: async () => ({
+            token: "test-jwt",
+            expiresAt: new Date(Date.now() + 3600 * 1000).toISOString(),
+          }),
+          text: async () =>
+            JSON.stringify({
+              token: "test-jwt",
+              expiresAt: new Date(Date.now() + 3600 * 1000).toISOString(),
+            }),
+          clone() {
+            return this;
+          },
+        };
+      }
+      throw new Error(`unexpected fetch: ${target}`);
+    };
+  }
+
+  it("no session → no /api/token fetch, no Authorization header (audit A4)", async () => {
+    let tokenCalls = 0;
+    tokenFetch = sessionAwareFetch({
+      sessionData: null,
+      onToken: () => {
+        tokenCalls += 1;
+      },
+    });
+    const { api, clearToken } = await import("../src/lib/api.js");
+    clearToken();
+    let seen = "unset";
+    await api.get("/equipment", {
+      adapter: async (config) => {
+        seen = config.headers?.get?.("Authorization") ?? config.headers?.Authorization;
+        return { data: { items: [] }, status: 200, statusText: "OK", headers: {}, config };
+      },
+    });
+    assert.equal(seen, undefined);
+    assert.equal(tokenCalls, 0);
   });
 });

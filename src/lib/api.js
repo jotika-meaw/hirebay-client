@@ -1,15 +1,28 @@
 import axios from "axios";
+import { authClient } from "./auth-client.js";
 
 // Axios client for the Express API (used by api-source.js in Phase W).
 // JWTs come from /api/token and live in an in-memory cache; the cache is
 // refreshed when missing or under 60 s from expiry, retried once on 401,
-// and cleared on logout.
+// and cleared on logout. Logged-out visitors never touch /api/token:
+// getToken() first asks the BetterAuth client for a session and returns
+// null (no Authorization header, no failing request) when there is none.
 let cachedToken = null;
 let cachedExpiry = 0;
 
 export function clearToken() {
   cachedToken = null;
   cachedExpiry = 0;
+}
+
+// true = session, false = logged out, null = unknown (non-browser env).
+async function hasSession() {
+  try {
+    const { data } = await authClient.getSession();
+    return data ? true : false;
+  } catch {
+    return null;
+  }
 }
 
 async function fetchToken() {
@@ -23,6 +36,7 @@ async function fetchToken() {
 
 async function getToken() {
   if (cachedToken && Date.now() < cachedExpiry - 60 * 1000) return cachedToken;
+  if ((await hasSession()) === false) return null;
   return fetchToken();
 }
 
@@ -30,9 +44,10 @@ export const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 
 api.interceptors.request.use(async (config) => {
   try {
-    config.headers.Authorization = `Bearer ${await getToken()}`;
+    const token = await getToken();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
   } catch {
-    // Logged out: public requests go out without an Authorization header.
+    // No usable token: public requests go out without an Authorization header.
   }
   return config;
 });
@@ -43,9 +58,12 @@ api.interceptors.response.use(null, async (error) => {
     original._retry = true;
     clearToken();
     try {
-      original.headers.Authorization = `Bearer ${await getToken()}`;
+      const token = await getToken();
+      if (!token) throw error;
+      original.headers.Authorization = `Bearer ${token}`;
     } catch {
-      // Still logged out: rethrow the original 401 instead of failing on /api/token.
+      // No session (or bridge unreachable): rethrow the original 401 instead
+      // of failing on /api/token.
       throw error;
     }
     return api(original);
