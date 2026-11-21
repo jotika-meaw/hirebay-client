@@ -20,7 +20,8 @@ export default function Pagination({ params, pages }) {
 
   function go(page) {
     router.push(toCatalogSearch({ ...params, page }));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const smooth = typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
   }
 
   const items = [];

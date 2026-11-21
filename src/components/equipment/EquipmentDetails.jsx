@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Heart, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import BookingModal from "@/components/equipment/BookingModal";
 import { PHOTO_POSITIONS, shortCategory } from "@/components/equipment/EquipmentCard";
+import OwnerCard, { EquipmentNotFound } from "@/components/equipment/OwnerCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,21 +19,11 @@ import { cn } from "@/lib/utils";
 
 const UNIT_LABEL = { daily: "day", weekly: "week", monthly: "month" };
 
-function initials(name) {
-  return String(name || "?")
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
 // /equipment/[id]: gallery, badges, specs, price card, owner card,
 // description, terms, favorite toggle. Owners/admins see a notice instead
 // of Book now. Unknown ids render a 404 state.
 export default function EquipmentDetails() {
   const { id } = useParams();
-  const router = useRouter();
   const { data: session } = authClient.useSession();
   const role = session?.user?.role ?? null;
   const isCustomer = role === "customer";
@@ -59,33 +50,7 @@ export default function EquipmentDetails() {
 
   const item = data?.data;
   if (isError || !item) {
-    return (
-      <div className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col items-center justify-center px-7 py-20 text-center">
-        <p className="font-display text-[96px] leading-none font-extrabold tracking-[-0.05em]">
-          <span className="highlight">404</span>
-        </p>
-        <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight">
-          This equipment is not available.
-        </h1>
-        <p className="mt-3 max-w-md text-[15px] leading-7 text-muted-foreground">
-          The listing may have been removed or is awaiting approval. Let&apos;s get you back to the catalog.
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
-          >
-            Back to home
-          </Link>
-          <Link
-            href="/equipment"
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-input bg-card px-6 text-[15px] font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-muted"
-          >
-            Browse equipment
-          </Link>
-        </div>
-      </div>
-    );
+    return <EquipmentNotFound />;
   }
 
   const isFavorite = Boolean(favoriteIds?.data?.includes(item.id));
@@ -198,22 +163,7 @@ export default function EquipmentDetails() {
               manage listings from your dashboard instead.
             </div>
           )}
-          <div className="flex items-center gap-3.5 rounded-[20px] border border-border bg-card p-4">
-            <span
-              aria-hidden="true"
-              className="flex size-[50px] flex-none items-center justify-center rounded-full bg-[#111111] font-extrabold text-white"
-            >
-              {initials(item.owner?.name)}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[11px] font-extrabold tracking-[0.06em] text-subtle">OWNER</span>
-              <b className="block truncate">{item.owner?.name}</b>
-              <span className="block truncate text-[13px] text-muted-foreground">
-                {item.owner?.email} · {item.owner?.phone}{item.owner?.since ? ` · since ${item.owner.since}` : ""}
-              </span>
-            </span>
-            <Badge variant="success" className="flex-none">✓ Verified</Badge>
-          </div>
+          <OwnerCard owner={item.owner} />
         </div>
       </div>
 

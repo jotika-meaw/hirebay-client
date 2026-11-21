@@ -39,11 +39,23 @@ export default function CatalogContent() {
         <FilterPanel params={params} urlKey={urlKey} />
         <div className="flex min-w-0 flex-1 flex-col gap-[22px]">
           <ActiveChips params={params} total={total} />
-          {isPending || isError ? (
+          {isPending ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3" aria-label="Loading equipment">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="h-[380px] animate-pulse rounded-[24px] bg-muted" />
               ))}
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center gap-3 rounded-[24px] border border-danger/30 bg-danger-bg/40 px-6 py-16 text-center" role="alert">
+              <p className="m-0 font-display text-2xl font-extrabold">Couldn&apos;t load equipment.</p>
+              <p className="m-0 text-sm text-muted-foreground">Check your connection and try again.</p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-2 inline-flex min-h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground"
+              >
+                Try again
+              </button>
             </div>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center gap-3 rounded-[24px] border border-border bg-card px-6 py-16 text-center">
