@@ -58,7 +58,7 @@ export default function MonthlyEarnings({ monthly }) {
           <Bar dataKey="v" radius={[6, 6, 0, 0]}>
             <LabelList dataKey="v" position="top" fill={tickFill} fontSize={12} fontWeight={600} />
             {data.map((d, i) => (
-              <Cell key={i} fill={d.last ? "var(--brand)" : track} />
+              <Cell key={i} fill={d.last ? "#FFC727" : track} />
             ))}
           </Bar>
         </BarChart>

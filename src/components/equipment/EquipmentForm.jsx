@@ -62,7 +62,7 @@ export default function EquipmentForm({ id = "equipment-form", initial, onSubmit
       brand: initial?.brand ?? "",
       model: initial?.model ?? "",
       image: initial?.image ?? "",
-      terms: initial?.terms ?? "",
+      terms: Array.isArray(initial?.terms) ? initial.terms.join("\n") : (initial?.terms ?? ""),
     },
   });
   const imageValue = useWatch({ control, name: "image" }) ?? "";

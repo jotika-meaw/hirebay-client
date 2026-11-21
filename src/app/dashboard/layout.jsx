@@ -25,7 +25,7 @@ export default async function DashboardLayout({ children }) {
         <Sidebar user={user} />
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <MobileNav user={user} />
-          <Topbar user={user} heading={heading} />
+          <Topbar user={user} heading={heading} crumb={heading} />
           <main className="min-w-0 flex-1">{children}</main>
         </div>
       </div>

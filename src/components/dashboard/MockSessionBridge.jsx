@@ -13,17 +13,18 @@ import { source } from "@/lib/data/source";
 const PERSONA = { customer: "u-rafi", owner: "u-karim", admin: "u-admin" };
 
 export default function MockSessionBridge() {
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const client = useQueryClient();
   const role = session?.user?.role ?? null;
   const userId = session?.user?.id ?? null;
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_DATA_SOURCE === "api") return;
+    if (isPending) return;
     if (typeof source.setMockSession !== "function") return;
     source.setMockSession(role ? (PERSONA[role] ?? "u-rafi") : null);
     client.invalidateQueries();
-  }, [client, role, userId]);
+  }, [client, role, userId, isPending]);
 
   return null;
 }
