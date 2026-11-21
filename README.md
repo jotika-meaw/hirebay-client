@@ -5,6 +5,18 @@ Hirebay — equipment rental platform. Owners list equipment, an admin approves 
 - Live site: `https://hirebay-client.vercel.app`
 - API: `https://hirebay-server.vercel.app` ([hirebay-server repo](https://github.com/jotika-meaw/hirebay-server)) · [hirebay-client repo](https://github.com/jotika-meaw/hirebay-client)
 
+## Demo accounts
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@hirebay.app | Hbpz9gp8FUa9 |
+| Owner | karim@hirebay.test | DemoPeXhnrx1 |
+| Owner | lensbox@hirebay.test | DemoPeXhnrx1 |
+| Customer | rafi@hirebay.test | DemoPeXhnrx1 |
+| Customer | nusrat@hirebay.test | DemoPeXhnrx1 |
+
+- Stripe test card: 4242 4242 4242 4242, any future expiry date, any CVC.
+- Demo data is shared — please don't delete other users' listings.
+
 ## Key features
 
 **Everyone:** fluid-gradient planner hero, server-side catalog search/filters/sort/pagination, equipment details, stats band, reviews + FAQ, owner CTA, light/dark theme, ⌘K command search.
