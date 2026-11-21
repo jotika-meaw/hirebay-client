@@ -114,6 +114,10 @@ function applyEquipmentFilters(rows, params = {}) {
     const re = new RegExp(escapeRegex(String(search).slice(0, 60).trim()), "i");
     out = out.filter((e) => re.test(e.name) || re.test(e.location) || re.test(e.category));
   }
+  if (params.location && String(params.location).slice(0, 60).trim()) {
+    const re = new RegExp(escapeRegex(String(params.location).slice(0, 60).trim()), "i");
+    out = out.filter((e) => re.test(e.location));
+  }
   if (category) {
     const cats = String(category)
       .split(",")
