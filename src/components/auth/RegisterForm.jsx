@@ -139,7 +139,10 @@ export default function RegisterForm({ redirect, initialRole }) {
       toast.error("Google sign-in isn't set up yet — use email instead");
       return;
     }
-    authClient.signIn.social({ provider: "google", callbackURL: target });
+    authClient.signIn.social({
+      provider: "google",
+      callbackURL: `${target}${target.includes("?") ? "&" : "?"}welcome=google`,
+    });
   }
 
   const loginHref = redirect ? `/login?redirect=${encodeURIComponent(redirect)}` : "/login";
@@ -245,7 +248,7 @@ export default function RegisterForm({ redirect, initialRole }) {
           Log in
         </Link>
       </p>
-      <p className="text-center text-xs text-subtle">Google sign-ups start as Customers.</p>
+      <p className="text-center text-xs text-subtle">Google sign-ups start as customers; an admin can make you an owner.</p>
     </>
   );
 }

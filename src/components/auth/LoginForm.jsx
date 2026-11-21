@@ -74,7 +74,10 @@ export default function LoginForm({ redirect }) {
       toast.error("Google sign-in isn't set up yet — use email instead");
       return;
     }
-    authClient.signIn.social({ provider: "google", callbackURL: target });
+    authClient.signIn.social({
+      provider: "google",
+      callbackURL: `${target}${target.includes("?") ? "&" : "?"}welcome=google`,
+    });
   }
 
   const registerHref = redirect

@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { requireSession } from "@/lib/session";
+import WelcomeToast from "@/components/auth/WelcomeToast";
 import MobileNav from "@/components/dashboard/MobileNav";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Topbar from "@/components/dashboard/Topbar";
@@ -21,6 +23,9 @@ export default async function DashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Suspense fallback={null}>
+        <WelcomeToast />
+      </Suspense>
       <div className="mx-auto flex w-full max-w-[1440px] gap-4 p-4">
         <Sidebar user={user} />
         <div className="flex min-w-0 flex-1 flex-col gap-4">
