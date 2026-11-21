@@ -4,6 +4,7 @@
 // `.equipmentId` and joined rows match what the hooks already consume.
 
 import { api } from "@/lib/api";
+import { monthOverMonth } from "@/lib/analytics";
 
 async function unwrap(promise) {
   try {
@@ -171,21 +172,13 @@ export async function getAdminAnalytics() {
   return unwrap(api.get("/analytics/admin"));
 }
 
-const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
 export async function getOwnerAnalytics() {
   const data = await unwrap(api.get("/analytics/owner"));
   // The server has no `thisMonthDelta` display string (contract wins):
-  // derive "+X% vs <Month>" from monthly[] when the previous month > 0.
-  const monthly = data?.data?.monthly ?? [];
-  if (monthly.length >= 2) {
-    const cur = monthly[monthly.length - 1];
-    const prev = monthly[monthly.length - 2];
-    if (prev.earnings > 0) {
-      const pct = Math.round(((cur.earnings - prev.earnings) / prev.earnings) * 100);
-      const label = `${MONTH_NAMES[Number(String(prev.month).slice(5, 7)) - 1] ?? ""}`;
-      data.data.thisMonthDelta = `${pct >= 0 ? "+" : ""}${pct}% vs ${label}`;
-    }
+  // derive "+X% vs <Mon>" from monthly[] when computable, else omit it.
+  const mom = monthOverMonth(data?.data?.monthly, "earnings");
+  if (mom) {
+    data.data.thisMonthDelta = `${mom.pct >= 0 ? "+" : ""}${mom.pct}% vs ${mom.label}`;
   }
   return data;
 }

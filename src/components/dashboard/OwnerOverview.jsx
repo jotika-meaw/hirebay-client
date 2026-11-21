@@ -6,10 +6,12 @@ import LatestRentals from "@/components/dashboard/LatestRentals";
 import MonthlyEarnings from "@/components/dashboard/MonthlyEarnings";
 import StatusDonut from "@/components/dashboard/StatusDonut";
 import { useOwnerAnalytics } from "@/lib/data/hooks";
+import { monthOverMonth } from "@/lib/analytics";
 import { formatCompactBDT } from "@/lib/money";
 
 // Owner overview: 4 KPIs, monthly earnings bars (latest yellow),
-// rental-status donut, latest rentals table.
+// rental-status donut, latest rentals table. Every caption is derived
+// from the analytics payload; captions that cannot be computed are hidden.
 export default function OwnerOverview() {
   const { data, isPending } = useOwnerAnalytics();
   const a = data?.data;
@@ -25,6 +27,11 @@ export default function OwnerOverview() {
   }
 
   const total = (a.statusMix?.completed ?? 0) + (a.statusMix?.confirmed ?? 0) + (a.statusMix?.pending ?? 0);
+  const earningsMoM = monthOverMonth(Array.isArray(a.monthly) ? a.monthly : [], "earnings");
+  const earningsCaption =
+    earningsMoM == null
+      ? null
+      : `${earningsMoM.pct >= 0 ? "+" : ""}${earningsMoM.pct}% vs ${earningsMoM.label}`;
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,7 +41,7 @@ export default function OwnerOverview() {
           value={a.listed}
           delta={`${a.approved} approved · ${a.pending} pending · ${a.rejected} rejected`}
         />
-        <KpiCard label="Completed rentals" value={a.completedRentals} delta="+9 this month" deltaTone="success" />
+        <KpiCard label="Completed rentals" value={a.completedRentals} />
         <KpiCard label="Total earnings" value={formatCompactBDT(a.totalEarnings)} delta="All paid bookings" />
         <KpiCard label="This month" value={formatCompactBDT(a.thisMonth)} delta={a.thisMonthDelta} deltaTone="success" />
       </div>
@@ -42,7 +49,9 @@ export default function OwnerOverview() {
         <DataCard
           title="Monthly earnings (৳ thousand)"
           action={
-            <span className="rounded-full bg-success-bg px-3 py-1 text-xs font-bold text-success">+16% vs Oct</span>
+            earningsCaption ? (
+              <span className="rounded-full bg-success-bg px-3 py-1 text-xs font-bold text-success">{earningsCaption}</span>
+            ) : undefined
           }
         >
           <MonthlyEarnings monthly={a.monthly} />
