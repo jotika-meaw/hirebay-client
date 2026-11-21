@@ -1,9 +1,11 @@
-// Demo seed (02 §7). Creates the BetterAuth users via signUpEmail, sets
-// roles directly, inserts the 13 demo equipment rows, bookings + payments.
-// Idempotent: existing users are skipped, equipment/bookings insert only
-// when their collections are empty. Usage:
-//   npm run seed                        # into DB_NAME from .env.local
-//   DB_NAME=hirebay npm run seed -- --production   # production, once
+// Demo seed (02 §7). Creates the BetterAuth users via the running dev
+// server's sign-up endpoint (run `npm run dev` in another terminal first),
+// sets roles directly, inserts the 13 demo equipment rows, bookings +
+// payments. Idempotent: existing users are skipped, equipment/bookings
+// insert only when their collections are empty. Usage:
+//   npm run dev                                    # terminal 1
+//   npm run seed                                   # terminal 2, into .env.local DB_NAME
+//   DB_NAME=hirebay npm run seed -- --production   # production, once (owner-approved)
 import { readFileSync } from "node:fs";
 import { MongoClient } from "mongodb";
 
@@ -37,11 +39,23 @@ for (const name of ["MONGODB_URI", "BETTER_AUTH_SECRET", "SEED_ADMIN_EMAIL", "SE
   }
 }
 
-const [{ getAuth }] = await Promise.all([import("@/lib/auth.js")]);
-const { equipment: demoEquipment } = await import("@/lib/mock/data.js");
-const { wholeDays, billableUnits } = await import("@/lib/pricing.js");
+const { equipment: demoEquipment } = await import("../src/lib/mock/data.js");
+const { wholeDays, billableUnits } = await import("../src/lib/pricing.js");
 
-const auth = getAuth();
+const AUTH_URL = (process.env.BETTER_AUTH_URL || "http://localhost:3000").replace(/\/$/, "");
+
+async function signUpEmail({ name, email, password, accountType }) {
+  const res = await fetch(`${AUTH_URL}/api/auth/sign-up/email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Origin: AUTH_URL },
+    body: JSON.stringify({ name, email, password, accountType }),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`sign-up failed for ${email}: ${res.status} ${text.slice(0, 160)}`);
+  }
+}
+
 const mongo = new MongoClient(process.env.MONGODB_URI);
 await mongo.connect();
 const db = mongo.db(DB_NAME);
@@ -68,7 +82,7 @@ for (const u of seedUsers) {
   }
   const body = { name: u.name, email: u.email, password: u.password };
   if (u.accountType) body.accountType = u.accountType;
-  await auth.api.signUpEmail({ body, headers: new Headers() });
+  await signUpEmail(body);
   const created = await db.collection("user").findOne({ email: u.email });
   if (u.role !== (created.role ?? "customer")) {
     await db.collection("user").updateOne({ _id: created._id }, { $set: { role: u.role, updatedAt: new Date() } });
