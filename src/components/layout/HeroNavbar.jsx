@@ -1,12 +1,14 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { useReducedMotion } from "motion/react";
+import { Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Logo from "@/components/layout/Logo";
+import HeroMobileMenu from "@/components/layout/HeroMobileMenu";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { openCommandMenu } from "@/components/layout/CommandMenu";
 import { authClient } from "@/lib/auth-client";
@@ -30,11 +32,37 @@ function initials(name) {
     .toUpperCase();
 }
 
-// Transparent navbar that lives inside the dark hero panel.
+// Transparent navbar that lives inside the dark hero panel. Past ~80px of
+// scroll it pins to the viewport top as a dark glass pill (sentinel +
+// IntersectionObserver); a placeholder keeps the page from jumping.
 export default function HeroNavbar() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user ?? null;
+  const [stuck, setStuck] = useState(false);
+  const [barHeight, setBarHeight] = useState(0);
+  const barRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const sentinel = document.getElementById("hero-navbar-sentinel");
+    if (!sentinel) return;
+    const io = new IntersectionObserver(([entry]) => setStuck(!entry.isIntersecting), {
+      threshold: 0,
+    });
+    io.observe(sentinel);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (stuck) return;
+    const measure = () => {
+      if (barRef.current) setBarHeight(barRef.current.offsetHeight);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [stuck]);
 
   async function handleLogout() {
     await authClient.signOut();
@@ -44,7 +72,21 @@ export default function HeroNavbar() {
   }
 
   return (
-    <nav aria-label="Main" className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-5 py-5 sm:px-7 sm:py-6">
+    <>
+      {stuck && barHeight > 0 ? <div aria-hidden="true" style={{ height: barHeight }} /> : null}
+      <nav
+        ref={barRef}
+        aria-label="Main"
+        className={cn(
+          "grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-5 py-5 sm:px-7 sm:py-6",
+          reduceMotion
+            ? "transition-none"
+            : "transition-[background-color,border-color,padding,border-radius,box-shadow] duration-200",
+          stuck
+            ? "fixed top-3 left-1/2 z-40 w-[min(1200px,calc(100%-1.5rem))] -translate-x-1/2 rounded-full border border-white/[0.08] bg-[#111111]/85 py-2 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:py-2"
+            : "border border-transparent bg-transparent"
+        )}
+      >
       <Link
         href="/"
         aria-label="Hirebay home"
@@ -125,54 +167,9 @@ export default function HeroNavbar() {
           </Link>
         </>
       )}
-      <Sheet>
-        <SheetTrigger
-          aria-label="Open menu"
-          className="inline-flex size-11 items-center justify-center rounded-full border border-white/16 bg-white/6 text-white min-[1080px]:hidden"
-        >
-          <Menu className="size-5" aria-hidden="true" />
-        </SheetTrigger>
-        <SheetContent side="right" className="w-72">
-          <SheetTitle className="sr-only">Menu</SheetTitle>
-          <div className="flex flex-col gap-1 p-4 pt-12">
-            {LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
-              <div className="flex min-h-11 items-center justify-between px-4">
-                <span className="text-sm font-semibold">Theme</span>
-                <ThemeToggle />
-              </div>
-              {user ? (
-                <>
-                  <Link href="/dashboard" className="inline-flex min-h-11 items-center justify-center rounded-full border border-input bg-card px-4 text-sm font-semibold">
-                    Dashboard
-                  </Link>
-                  <Button className="w-full" onClick={handleLogout}>
-                    Logout
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" className="inline-flex min-h-11 items-center justify-center rounded-full border border-input bg-card px-4 text-sm font-semibold">
-                    Login
-                  </Link>
-                  <Link href="/register" className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground">
-                    Register
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+      <HeroMobileMenu user={user} onLogout={handleLogout} />
       </div>
-    </nav>
+      </nav>
+    </>
   );
 }

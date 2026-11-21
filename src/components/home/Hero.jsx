@@ -91,7 +91,8 @@ export default function Hero() {
   }
 
   return (
-    <section className="px-3 pt-3">
+    <section className="relative px-3 pt-3">
+      <div id="hero-navbar-sentinel" aria-hidden="true" className="absolute top-[80px] left-0 h-px w-px" />
       <div className="relative flex min-h-[640px] flex-col overflow-hidden rounded-[24px] bg-[#111111] text-white md:min-h-[780px] md:rounded-[32px]">
         <FluidGradient />
         <div className="relative">
