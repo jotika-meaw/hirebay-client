@@ -107,14 +107,14 @@ export default function EquipmentCard({ item }) {
             {item.rentalType.toUpperCase()}
           </span>
         </div>
-        <div className="mt-auto flex items-center justify-between border-t border-dashed border-input pt-3">
-          <span>
-            <b className="font-display text-2xl tracking-[-0.03em]">{formatBDT(item.price)}</b>
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-dashed border-input pt-3">
+          <span className="min-w-0 flex-1">
+            <b className="font-display text-2xl tracking-[-0.03em] whitespace-nowrap">{formatBDT(item.price)}</b>
             <span className="text-[13px] text-muted-foreground"> / {UNIT_LABEL[item.rentalType] ?? item.rentalType}</span>
           </span>
           <Link
             href={detailsHref}
-            className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
+            className="inline-flex h-11 w-[124px] flex-none items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold whitespace-nowrap text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
           >
             View details
           </Link>
