@@ -125,7 +125,7 @@ export default function Hero() {
                     aria-selected={on}
                     onClick={() => pickMode(id)}
                     className={cn(
-                      "inline-flex min-h-11 items-center gap-[7px] rounded-full border-0 px-4 text-sm font-semibold transition-colors duration-300",
+                      "inline-flex min-h-11 items-center justify-center gap-[7px] rounded-full border-0 px-4 text-sm font-semibold transition-colors duration-300",
                       on ? "bg-white text-[#111111]" : "bg-transparent text-white/75 hover:text-white"
                     )}
                   >
@@ -185,7 +185,7 @@ export default function Hero() {
             <button
               type="button"
               onClick={() => submit(TRY_QUERY[mode])}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white/88 transition-colors hover:text-white"
+              className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-white/88 transition-colors hover:text-white"
             >
               <CornerDownRight className="size-[15px]" strokeWidth={2.2} aria-hidden="true" />
               {mode === "rent" ? "Try: hydraulic excavator in Gazipur for 3 days" : "Try: list a 60kVA generator in Comilla"}

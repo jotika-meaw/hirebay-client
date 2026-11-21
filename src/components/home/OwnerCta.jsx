@@ -30,13 +30,13 @@ export default function OwnerCta() {
           <div className="flex flex-wrap gap-2.5">
             <Link
               href={listHref}
-              className="inline-flex min-h-11 items-center rounded-full bg-[#111111] px-[22px] py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#111111] px-[22px] py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
             >
               List your equipment
             </Link>
             <Link
               href="/dashboard"
-              className="inline-flex min-h-11 items-center rounded-full bg-white px-[22px] py-3 text-[15px] font-semibold text-[#111111] shadow-[inset_0_0_0_1px_#D6D3D1] transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-[22px] py-3 text-[15px] font-semibold text-[#111111] shadow-[inset_0_0_0_1px_#D6D3D1] transition-all duration-200 hover:-translate-y-0.5"
             >
               See owner dashboard
             </Link>

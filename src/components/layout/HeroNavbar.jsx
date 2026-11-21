@@ -44,11 +44,11 @@ export default function HeroNavbar() {
   }
 
   return (
-    <nav aria-label="Main" className="flex items-center gap-2 px-5 py-5 sm:px-7 sm:py-6">
+    <nav aria-label="Main" className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-5 py-5 sm:px-7 sm:py-6">
       <Link
         href="/"
         aria-label="Hirebay home"
-        className="inline-flex min-h-11 items-center gap-2 pr-2 font-display text-[21px] font-extrabold lowercase tracking-[-0.04em] text-white"
+        className="inline-flex min-h-11 items-center justify-self-start gap-2 pr-2 font-display text-[21px] font-extrabold lowercase tracking-[-0.04em] text-white"
       >
         <span
           aria-hidden="true"
@@ -60,7 +60,7 @@ export default function HeroNavbar() {
         </span>
         hirebay
       </Link>
-      <div className="mx-auto hidden items-center gap-0.5 min-[1080px]:flex">
+      <div className="hidden items-center justify-self-center gap-0.5 min-[1080px]:flex">
         {LINKS.map((link, i) => (
           <Link
             key={link.href}
@@ -75,6 +75,7 @@ export default function HeroNavbar() {
           </Link>
         ))}
       </div>
+      <div className="flex items-center justify-self-end gap-2">
       <button
         type="button"
         onClick={openCommandMenu}
@@ -171,6 +172,7 @@ export default function HeroNavbar() {
           </div>
         </SheetContent>
       </Sheet>
+      </div>
     </nav>
   );
 }

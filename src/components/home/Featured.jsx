@@ -62,7 +62,7 @@ export default function Featured() {
         </div>
         <Link
           href="/equipment"
-          className="inline-flex min-h-11 items-center rounded-full border border-input bg-card px-[22px] py-3 text-[15px] font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-muted"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-input bg-card px-[22px] py-3 text-[15px] font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-muted"
         >
           View all equipment →
         </Link>
