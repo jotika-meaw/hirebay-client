@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/components/layout/Logo";
 
 function XLogo({ className }) {
   return (
@@ -57,7 +58,7 @@ export function CompactFooter() {
     <footer className="bg-[#111111] text-white">
       <div className="hazard h-2.5" aria-hidden="true" />
       <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-6 py-4">
-        <p className="font-display text-lg font-extrabold lowercase">hirebay</p>
+        <Logo className="text-white [&_span:last-child]:text-lg" />
         <p className="text-sm text-white/70">
           © 2026 Hirebay · support@hirebay.app · Banani, Dhaka
         </p>
@@ -88,7 +89,7 @@ export function FullFooter() {
       <div className="hazard h-2.5" aria-hidden="true" />
       <div className="mx-auto grid w-full max-w-[1200px] gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-2xl font-extrabold lowercase">hirebay</p>
+          <Logo className="text-white" />
           <p className="mt-3 max-w-xs text-[15px] leading-7 text-white/70">
             The rental marketplace connecting equipment owners with the people
             who need their gear — across Bangladesh.
