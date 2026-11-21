@@ -78,7 +78,7 @@ export default function Featured() {
                 aria-selected={on}
                 onClick={() => setTab(t.id)}
                 className={cn(
-                  "relative min-h-[42px] rounded-full px-[18px] text-sm font-semibold transition-colors duration-300",
+                  "relative min-h-11 rounded-full px-[18px] text-sm font-semibold transition-colors duration-300",
                   on ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 )}
               >

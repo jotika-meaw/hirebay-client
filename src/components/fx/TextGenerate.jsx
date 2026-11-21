@@ -8,11 +8,11 @@ export default function TextGenerate({ text, className, baseDelay = 0.3 }) {
   const reduce = useReducedMotion();
   const words = text.split(" ");
   return (
-    <span className={className}>
+    <span className={className} aria-label={text}>
       {words.map((word, i) => (
         <motion.span
           key={`${word}-${i}`}
-          aria-hidden={false}
+          aria-hidden="true"
           className="mr-[0.26em] inline-block"
           initial={reduce ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(8px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}

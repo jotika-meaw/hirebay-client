@@ -76,7 +76,7 @@ export default function HeroNavbar() {
       <Link
         href="/equipment"
         aria-label="Search equipment, command menu"
-        className="hidden h-[42px] items-center gap-2 rounded-full border border-white/16 bg-white/6 px-3.5 text-[13px] text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex"
+        className="hidden h-11 items-center gap-2 rounded-full border border-white/16 bg-white/6 px-3.5 text-[13px] text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex"
       >
         <Search className="size-[15px]" aria-hidden="true" />
         Search
@@ -88,7 +88,7 @@ export default function HeroNavbar() {
         <>
           <Link
             href="/dashboard"
-            className="hidden h-[42px] items-center rounded-full border border-white/25 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:inline-flex"
+            className="hidden h-11 items-center rounded-full border border-white/25 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:inline-flex"
           >
             Dashboard
           </Link>
@@ -99,7 +99,7 @@ export default function HeroNavbar() {
           </Avatar>
           <Button
             onClick={handleLogout}
-            className="h-[42px] rounded-full bg-white px-[18px] text-sm text-[#111111] hover:bg-white/85"
+            className="h-11 rounded-full bg-white px-[18px] text-sm text-[#111111] hover:bg-white/85"
           >
             Logout
           </Button>
@@ -108,13 +108,13 @@ export default function HeroNavbar() {
         <>
           <Link
             href="/login"
-            className="hidden min-h-[42px] items-center px-3 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:inline-flex"
+            className="hidden min-h-11 items-center px-3 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:inline-flex"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="inline-flex min-h-[42px] items-center rounded-full bg-white px-[18px] text-sm font-semibold text-[#111111] transition-transform duration-200 hover:-translate-y-0.5"
+            className="inline-flex min-h-11 items-center rounded-full bg-white px-[18px] text-sm font-semibold text-[#111111] transition-transform duration-200 hover:-translate-y-0.5"
           >
             Register
           </Link>

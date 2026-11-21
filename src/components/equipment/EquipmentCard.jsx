@@ -114,7 +114,7 @@ export default function EquipmentCard({ item }) {
           </span>
           <Link
             href={detailsHref}
-            className="inline-flex min-h-[42px] items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
+            className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5"
           >
             View details
           </Link>

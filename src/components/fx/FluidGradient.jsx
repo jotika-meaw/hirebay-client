@@ -3,7 +3,7 @@
 // prefers-reduced-motion the global CSS rule freezes them in place.
 export default function FluidGradient() {
   return (
-    <div aria-hidden="true" className="absolute inset-0 -z-0 overflow-hidden">
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
       <span className="fb f1" />
       <span className="fb f2" />
       <span className="fb f3" />
