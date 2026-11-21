@@ -14,6 +14,7 @@ import {
 import Logo from "@/components/layout/Logo";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { authClient } from "@/lib/auth-client";
+import { clearToken } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -67,6 +68,7 @@ export default function SiteNavbar() {
 
   async function handleLogout() {
     await authClient.signOut();
+    clearToken();
     router.push("/");
     router.refresh();
   }
