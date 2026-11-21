@@ -67,6 +67,13 @@ export default function LoginForm({ redirect }) {
   }
 
   function continueWithGoogle() {
+    // No Google keys are configured (owner decision): stay put with a toast
+    // instead of navigating into a provider error. Flip
+    // NEXT_PUBLIC_GOOGLE_ENABLED=1 when keys are added.
+    if (process.env.NEXT_PUBLIC_GOOGLE_ENABLED !== "1") {
+      toast.error("Google sign-in isn't set up yet — use email instead");
+      return;
+    }
     authClient.signIn.social({ provider: "google", callbackURL: target });
   }
 

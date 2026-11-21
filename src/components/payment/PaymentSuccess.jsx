@@ -20,11 +20,13 @@ function periodLine(booking) {
   return `${range} · ${booking.days} day${booking.days === 1 ? "" : "s"} · ${booking.quantity} unit${booking.quantity === 1 ? "" : "s"}`;
 }
 
-// /payment/success: confirms the reservation (mock) then shows the paid
-// summary. `demo=1` adds the "no payment taken" badge.
+// /payment/success: confirms the reservation, then shows the paid summary.
+// Mock mode passes ?demo=1&booking=<id> (badge: "no payment taken"); the
+// live Stripe flow passes ?session_id=<id> (idempotent, safe on reload).
 export default function PaymentSuccess() {
   const sp = useSearchParams();
-  const bookingId = sp.get("booking") ?? sp.get("bookingId");
+  const sessionId = sp.get("session_id");
+  const bookingId = sessionId ?? sp.get("booking") ?? sp.get("bookingId");
   const demo = sp.get("demo") === "1";
   const confirmPayment = useConfirmPayment();
   const { data: mine } = useMyBookings();
@@ -36,14 +38,14 @@ export default function PaymentSuccess() {
     if (!bookingId || started.current === bookingId) return;
     started.current = bookingId;
     confirmPayment.mutate(
-      { bookingId },
+      sessionId ? { sessionId } : { bookingId },
       {
         onSuccess: (res) => setConfirmed(res.data.booking),
         onError: (err) => setFailed(err?.message || "Payment confirmation failed"),
       }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookingId]);
+  }, [sessionId, bookingId]);
 
   const fallback = !bookingId ? null : (mine?.items ?? []).find((b) => b.id === bookingId) ?? null;
   const booking = confirmed ?? fallback;

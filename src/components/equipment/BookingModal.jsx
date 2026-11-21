@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import BookingFields from "@/components/equipment/BookingFields";
 import BookingSummary from "@/components/equipment/BookingSummary";
 import { PHOTO_POSITIONS } from "@/components/equipment/EquipmentCard";
-import { useCreateBooking } from "@/lib/data/hooks";
+import { useCheckout, useCreateBooking } from "@/lib/data/hooks";
 import { bookingSchema } from "@/lib/validators";
 import { computePricing } from "@/lib/pricing";
 
@@ -43,10 +43,12 @@ const formSchema = bookingSchema
 // Booking modal (customers): dates (no past dates, end ≥ start), quantity
 // stepper (max = stock), BD phone, address (5–200), notes (≤ 500) with zod
 // inline errors, live total from pricing.js, availability line,
-// "Continue to Stripe payment" → reservation → mock success page.
+// "Continue to Stripe payment" → reservation → Stripe Checkout in api mode
+// (mock mode goes to the demo success page instead).
 export default function BookingModal({ item, open, onOpenChange }) {
   const router = useRouter();
   const createBooking = useCreateBooking();
+  const checkout = useCheckout();
 
   const {
     register,
@@ -85,6 +87,15 @@ export default function BookingModal({ item, open, onOpenChange }) {
       { ...values, equipmentId: item.id, quantity: qty },
       {
         onSuccess: (res) => {
+          if (process.env.NEXT_PUBLIC_DATA_SOURCE === "api") {
+            // Real flow: create the Stripe Checkout Session, then leave the
+            // SPA for checkout.stripe.com (api-source navigates on its own).
+            checkout.mutate(
+              { bookingId: res.data.id },
+              { onError: (err) => toast.error(err?.message || "Could not start checkout") }
+            );
+            return;
+          }
           onOpenChange(false);
           router.push(`/payment/success?demo=1&booking=${res.data.id}`);
         },
