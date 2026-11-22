@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { House, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Logo from "@/components/layout/Logo";
-import { initials, menuFor, useLogout } from "@/lib/dashboard-nav";
+import UserAvatar from "@/components/layout/UserAvatar";
+import { menuFor, useLogout } from "@/lib/dashboard-nav";
 import { cn } from "@/lib/utils";
 
 const ROLE_BADGE = { customer: "success", owner: "info", admin: "brand" };
@@ -63,11 +63,11 @@ export default function Sidebar({ user }) {
           Logout
         </button>
         <div className="mt-1 flex items-center gap-2.5 rounded-2xl border border-border p-2.5">
-          <Avatar className="size-10">
-            <AvatarFallback className="bg-brand font-display text-xs font-extrabold text-brand-foreground">
-              {initials(user?.name)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            user={user}
+            className="size-10"
+            fallbackClassName="bg-brand font-display text-xs font-extrabold text-brand-foreground"
+          />
           <span className="min-w-0">
             <b className="block truncate text-sm">{user?.name}</b>
             <span className="block truncate text-xs text-muted-foreground">{user?.email}</span>

@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useReducedMotion } from "motion/react";
 import { Search } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/layout/Logo";
+import UserAvatar from "@/components/layout/UserAvatar";
 import HeroMobileMenu from "@/components/layout/HeroMobileMenu";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { openCommandMenu } from "@/components/layout/CommandMenu";
@@ -22,15 +22,6 @@ const LINKS = [
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
-
-function initials(name) {
-  return String(name || "?")
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
 
 // Transparent navbar that lives inside the dark hero panel. Past ~80px of
 // scroll it pins to the viewport top as a dark glass pill (sentinel +
@@ -139,11 +130,11 @@ export default function HeroNavbar() {
           >
             Dashboard
           </Link>
-          <Avatar className="size-11">
-            <AvatarFallback className="bg-brand font-display text-sm font-extrabold text-brand-foreground">
-              {initials(user.name)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            user={user}
+            className="size-11"
+            fallbackClassName="bg-brand font-display text-sm font-extrabold text-brand-foreground"
+          />
           <Button
             onClick={handleLogout}
             className="h-11 rounded-full bg-white px-[18px] text-sm text-[#111111] hover:bg-white/85"

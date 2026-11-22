@@ -1,13 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import ImagePicker from "@/components/dashboard/ImagePicker";
+import UserAvatar from "@/components/layout/UserAvatar";
+import { authClient } from "@/lib/auth-client";
 import { useMe, useUpdateMe } from "@/lib/data/hooks";
 import { phoneSchema } from "@/lib/validators";
 
@@ -16,15 +18,6 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 function memberSince(iso) {
   const d = new Date(iso);
   return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
-}
-
-function initials(name) {
-  return String(name || "?")
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }
 
 const profileSchema = z.object({
@@ -40,7 +33,9 @@ const ROLE_BADGE = { customer: "success", owner: "info", admin: "brand" };
 
 // Profile for every role: identity card + editable form (email read-only).
 export default function ProfileClient() {
+  const router = useRouter();
   const { data, isPending } = useMe();
+  const { refetch: refetchSession } = authClient.useSession();
   const updateMe = useUpdateMe();
   const user = data?.data;
 
@@ -78,7 +73,18 @@ export default function ProfileClient() {
 
   function onSubmit(values) {
     updateMe.mutate(values, {
-      onSuccess: () => toast.success("Profile updated"),
+      onSuccess: async () => {
+        toast.success("Profile updated");
+        // Push the new photo into the BetterAuth client store (navbars read
+        // it from useSession) and re-render server components (the dashboard
+        // layout reads the user from the session server-side).
+        try {
+          await refetchSession();
+        } catch {
+          // Session refreshes on the next navigation.
+        }
+        router.refresh();
+      },
       onError: (err) => toast.error(err?.message || "Could not save profile"),
     });
   }
@@ -88,12 +94,11 @@ export default function ProfileClient() {
       <div className="overflow-hidden rounded-[28px] border border-border bg-card">
         <div aria-hidden="true" className="h-28 bg-brand [background-image:radial-gradient(rgba(17,17,17,0.18)_1.2px,transparent_1.2px)] [background-size:14px_14px]" />
         <div className="-mt-10 flex flex-col items-center px-6 pb-6 text-center">
-          <Avatar className="size-20 ring-4 ring-card">
-            {user.image ? <AvatarImage src={user.image} alt="" /> : null}
-            <AvatarFallback className="bg-[#C2410C] font-display text-2xl font-extrabold text-white">
-              {initials(user.name)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            user={user}
+            className="size-20 ring-4 ring-card"
+            fallbackClassName="bg-[#C2410C] font-display text-2xl font-extrabold text-white"
+          />
           <b className="mt-3 font-display text-2xl font-extrabold tracking-tight">{user.name}</b>
           <Badge variant={ROLE_BADGE[user.role] ?? "neutral"} className="mt-1.5 capitalize">
             {user.role}

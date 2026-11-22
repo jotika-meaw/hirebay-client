@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, Search } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import Logo from "@/components/layout/Logo";
 import ThemeToggle from "@/components/layout/ThemeToggle";
+import UserAvatar from "@/components/layout/UserAvatar";
 import { authClient } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
 import { openCommandMenu } from "@/components/layout/CommandMenu";
@@ -30,15 +30,6 @@ function isActiveLink(href, pathname) {
   if (href === "/") return pathname === "/";
   if (href === "/equipment") return pathname.startsWith("/equipment");
   return false;
-}
-
-function initials(name) {
-  return String(name || "?")
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }
 
 function NavLink({ href, label, pathname, onNavigate }) {
@@ -110,11 +101,11 @@ export default function SiteNavbar() {
               >
                 Dashboard
               </Link>
-              <Avatar className="size-11">
-                <AvatarFallback className="bg-brand font-display text-sm font-extrabold text-brand-foreground">
-                  {initials(user?.name)}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                user={user}
+                className="size-11"
+                fallbackClassName="bg-brand font-display text-sm font-extrabold text-brand-foreground"
+              />
               <Button size="sm" onClick={handleLogout}>
                 Logout
               </Button>
